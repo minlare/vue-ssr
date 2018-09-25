@@ -1,0 +1,27 @@
+{
+  "name": "vue-ssr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/minlare/vue-ssr.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/minlare/vue-ssr/issues"
+  },
+  "homepage": "https://github.com/minlare/vue-ssr#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "express": "^4.16.3",
+    "vue": "^2.5.17",
+    "vue-server-renderer": "^2.5.17",
+    "webpack": "^4.19.1",
+    "webpack-cli": "^3.1.1"
+  }
+}
