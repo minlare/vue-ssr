@@ -1,33 +1,38 @@
-const Vue = require('vue');
-const server = require('express')();
-const renderer = require('vue-server-renderer').createRenderer();
+//express server
+const express = require('express');
+const server = express();
+const fs = require('fs');
+const path = require('path');
+//obtain bundle
+const bundle = require('./dist/server.bundle.js');
+//get renderer from vue server renderer
+const renderer = require('vue-server-renderer').createRenderer({
+  //set template
+  template: fs.readFileSync('./index.html', 'utf-8')
+});
 
-const vueApp = require('./index');
+server.use('/dist', express.static(path.join(__dirname, './dist')));
 
+//start server
 server.get('*', (req, res) => {
 
-  if (req.url === '/items.json') {
-    res.json([{ "name": "My item 1" }, { "name": "Second item" }]);
-    return;
-  }
+  bundle.default({
+    url: req.url
+  }).then((app) => {
 
-  console.log(req.url);
-
-  const app = new Vue(vueApp);
-
-  renderer.renderToString(app, (err, html) => {
-    if (err) {
-      console.log(err);
-      res.status(500).end('Internal Server Error');
-      return;
-    }
-    res.end(`
-      <!DOCTYPE html>
-      <html lang="en">
-        <head><title>Hello</title></head>
-        <body>${html}</body>
-      </html>
-    `);
+    renderer.renderToString(app, function (err, html) {
+      if (err) {
+        if (err.code === 404) {
+          res.status(404).end('Page not found')
+        } else {
+          res.status(500).end('Internal Server Error')
+        }
+      } else {
+        res.end(html)
+      }
+    });
+  }, (err) => {
+    console.log(err);
   });
 });
 
