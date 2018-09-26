@@ -7,21 +7,31 @@ export default context => {
   // we will be returning a Promise so that the server can wait until
   // everything is ready before rendering.
   return new Promise((resolve, reject) => {
-    try {
-      const {
-        app,
-        store
-      } = createApp();
+    const {
+      app,
+      router,
+      store
+    } = createApp();
 
-      console.log(store);
+    router.push(context.url);
+    router.onReady(() => {
+      const matchedComponents = router.getMatchedComponents();
+      if (!matchedComponents.length) {
+        return reject({
+          code: 404
+        });
+      }
 
-      store.state.items = [{
-        name: 'test'
-      }];
-
-      resolve(app);
-    } catch (e) {
-      reject();
-    }
+      Promise.all(matchedComponents.map(Component => {
+        if (Component.asyncData) {
+          return Component.asyncData({
+            store
+          })
+        }
+      })).then(() => {
+        context.state = store.state;
+        resolve(app);
+      }).catch(reject);
+    }, reject);
   });
 }

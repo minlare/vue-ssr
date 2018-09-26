@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
 
 const config = {
+  mode: 'development',
   module: {
     rules: [{
       test: /\.vue$/,

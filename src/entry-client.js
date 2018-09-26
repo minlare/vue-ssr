@@ -5,8 +5,14 @@ import {
 // client-specific bootstrapping logic...
 
 const {
-  app
+  app,
+  router,
+  store
 } = createApp();
+
+if (window.__INITIAL_STATE__) {
+  store.replaceState(window.__INITIAL_STATE__);
+}
 
 // this assumes App.vue template root element has `id="app"`
 app.$mount('#app');

@@ -1,16 +1,16 @@
 <template>
   <div id="app">
     <h1>Vue Component</h1>
-    <div>{{jsonItems}}</div>
+    <Items/>
   </div>
 </template>
 
 <script>
+import Items from './components/Items.vue';
+
 export default {
-  computed: {
-    jsonItems() {
-      return JSON.stringify(this.$store.state.items);
-    }
+  components: {
+    Items
   }
 };
 </script>
