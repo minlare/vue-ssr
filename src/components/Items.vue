@@ -3,7 +3,10 @@
     <h2>My Items</h2>
     <div>{{serverMessage}}</div>
     <div>
-      <div v-for="item in items" :key="item.id">{{item.id}}</div>
+      <div v-for="item in items" :key="item.id">
+        <img :src="item.avatar" :alt="item.first_name">
+        {{item.first_name}} {{item.last_name}}
+      </div>
     </div>
   </div>
 </template>

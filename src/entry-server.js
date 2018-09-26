@@ -29,7 +29,6 @@ export default context => {
           })
         }
       })).then(() => {
-        console.log('context.state = ', store.state);
         context.state = store.state;
         resolve(app);
       }).catch(reject);
