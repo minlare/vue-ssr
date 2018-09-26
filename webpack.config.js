@@ -1,8 +1,9 @@
 const webpack = require('webpack');
 const path = require('path');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const nodeExternals = require('webpack-node-externals');
+const VueSSRServerPlugin = require('vue-server-renderer/server-plugin');
 
 const config = {
   mode: 'development',
@@ -34,17 +35,16 @@ module.exports = [
   merge(config, {
     target: 'node',
     entry: './src/entry-server.js',
-    devtool: false,
+    devtool: 'source-map',
     output: {
       path: path.resolve(__dirname, './dist'),
-      filename: 'server.bundle.js',
       libraryTarget: 'commonjs2'
     },
-    externals: Object.keys(require('./package.json').dependencies),
+    externals: nodeExternals({
+      whitelist: /\.vue$/
+    }),
     plugins: [
-      new webpack.DefinePlugin({
-        'process.env': 'production'
-      })
+      new VueSSRServerPlugin()
     ]
   })
 ];
